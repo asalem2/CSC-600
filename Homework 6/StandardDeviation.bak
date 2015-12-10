@@ -1,0 +1,19 @@
+#|;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+HW6
+standarddeviation.rkt by Eric Gonzalez
+Calculates the standard deviation sigma from the given number(s)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|#
+#lang racket
+(define (squarenumber x)
+  (* x x))
+
+(define (listsum lst)
+  (if (null? lst) 0
+      (+ (car lst) (listsum (cdr lst)))))
+
+(define (squarelist lst)
+  (if (null? lst) 0
+      (+ (squarenumber (car lst)) (squarelist (cdr lst)))))
+
+(define sigma (lambda x(sqrt (- (/ (squarelist x) (length x))
+                                 (squarenumber (/ (listsum x) (length x)))))))

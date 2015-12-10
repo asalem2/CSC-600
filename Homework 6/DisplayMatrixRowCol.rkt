@@ -1,0 +1,46 @@
+#|;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+HW6 11/17/15
+DisplayMatrixRowCol.rkt by Eric Gonzalez
+
+Reads matrix from a file and display a specified row or column
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;|#
+#lang racket
+;read matrix from file
+(define (read-matrix filename)
+  (let* ((inport (open-input-file filename))
+         (nrow (read inport))
+         (ncol (read inport))
+         (mat (make-vector nrow)))
+    (do ((i 0 (add1 i)))
+      ((>= i nrow) (close-input-port inport) mat)
+      (let ((row (make-vector ncol)))
+        (do ((j 0 (add1 j)))
+          ((>= j ncol) (vector-set! mat i row))
+          (vector-set! row j (read inport)))))))
+
+;display vector
+(define (display-vector v)
+  (do ((i 0 (add1 i)))
+    ((>= i (vector-length v)) (display ""))
+    (display (vector-ref v i)) (display " ")))
+
+;return i-th row
+(define (ro filename i)
+  (define mat (read-matrix filename))
+  (vector-ref mat i))
+;display i-th row
+(define (row filename i)
+  (display-vector (ro filename (- i 1))))
+
+;return j-th col
+(define (co filename j)
+  (define mat (read-matrix filename))
+  (define nrow (vector-length mat))
+  (define column (make-vector nrow))
+  (do ((i 0 (add1 i)))
+    ((>= i nrow) column)
+    (vector-set! column i (vector-ref (vector-ref mat i) j))))
+
+;display j-th col
+(define (col filename j)
+  (display-vector (co filename (- j 1))))
